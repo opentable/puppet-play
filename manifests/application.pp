@@ -68,14 +68,14 @@ define play::application($path, $sync = false, $ensure = running, $frameworkId =
 	  notice("Running play application from ${path}")
 	  exec { "play-resolve-dependencies-${path}":
 	      path => "/bin:/usr/bin:/sbin",
-	      command => "${play::play_path}/activator dependencies ${syncArgument} ${path}",
+	      command => "${play::play_path}/activator dependencies ${syncArgument}",
 	      cwd     => "${path}",
 	      unless  => "test -f $path/server.pid",
 	  }
 
 	  exec { "start-play-application-${path}":
 	      path => "/bin:/usr/bin:/sbin",
-	      command => "${play::play_path}/activator start ${path} ${frameworkArgument} ${javaOptions}",
+	      command => "${play::play_path}/activator start ${frameworkArgument} ${javaOptions}",
 	      cwd     => "${path}",
 	      unless  => "test -f $path/server.pid",
 	  }
@@ -83,7 +83,7 @@ define play::application($path, $sync = false, $ensure = running, $frameworkId =
 		notice("Stopping play application from ${path}")
 		exec { "stop-play-application-${path}":
 	      path => "/bin:/usr/bin:/sbin",
-	      command => "${play::play_path}/activator stop ${path}",
+	      command => "${play::play_path}/activator stop",
 	      cwd     => "${path}",
 	      onlyif  => "test -f $path/server.pid",
 	  }

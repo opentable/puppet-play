@@ -16,12 +16,12 @@
 # wget puppet module https://github.com/maestrodev/puppet-wget
 # A proper java installation and JAVA_HOME set
 # Sample Usage:
-#  class {'play': 
+#  class {'play':
 #    version => "2.3.0",
 #    user    => "play"
 #  }
 #  play::module {"mongodb module" :
-#   module  => "mongo-1.3", 
+#   module  => "mongo-1.3",
 # require => [Class["play"], Class["mongodb"]]
 #  }
 #
@@ -36,8 +36,8 @@
 #  }
 #
 class play (
-  $version, 
-  $install_path = "/usr/share", 
+  $version,
+  $install_path = "/usr/share",
   $user= "root") {
 
 include wget
@@ -54,7 +54,7 @@ wget::fetch {'download-play-activator-framework':
 
 exec { "mkdir.play.install.path":
   command => "/bin/mkdir -p ${install_path}",
-  unless  => "/bin/bash [ -d ${install_path} ]"
+  unless  => "/usr/bin/test -d ${install_path}"
 }
 
 exec {"unzip-play-framework":
@@ -66,9 +66,9 @@ exec {"unzip-play-framework":
 
 exec { "change ownership of play installation":
   cwd      => "${install_path}",
-  command  => "/bin/chown -R ${user}: activator-${version}-minimal",
+  command  => "/bin/chown -R ${user}:${user} activator-${version}-minimal",
+  unless   => "/usr/bin/test `ls -la ${install_path} | head -2 | tail -1 | awk '{print $3}'` = '${user}'"
   require  => Exec["unzip-play-framework"]
-
 }
 
 file { "$play_path/activator":

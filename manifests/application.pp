@@ -69,8 +69,9 @@ define play::application($path, $sync = false, $ensure = running, $frameworkId =
 	  exec { "play-resolve-dependencies-${path}":
 	      path => "/bin:/usr/bin:/sbin",
 	      command => "${play::play_path}/activator dependencies ${syncArgument}",
+        timeout => 600,
 	      cwd     => "${path}",
-	      unless  => "test -f ${path}/RUNNING_PID",
+	      unless  => "test -f ${path}/RUNNING_PID"
 	  }
 
 	  exec { "start-play-application-${path}":
@@ -85,7 +86,7 @@ define play::application($path, $sync = false, $ensure = running, $frameworkId =
 	      path => "/bin:/usr/bin:/sbin",
 	      command => "${play::play_path}/activator stop",
 	      cwd     => "${path}",
-	      onlyif  => "test -f ${path}/RUNNING_PID",
+	      onlyif  => "test -f ${path}/RUNNING_PID"
 	  }
 	}
 }

@@ -67,7 +67,7 @@ exec {"unzip-play-framework":
 exec { "change ownership of play installation":
   cwd      => "${install_path}",
   command  => "/bin/chown -R ${user}:${user} activator-${version}-minimal",
-  unless   => "/usr/bin/test `ls -la ${install_path} | head -2 | tail -1 | awk '{print $3}'` = '${user}'",
+  unless   => "/usr/bin/test `ls -la ${install_path} | head -2 | tail -1 | awk '{print \$3}'` = '${user}'",
   require  => Exec["unzip-play-framework"]
 }
 
